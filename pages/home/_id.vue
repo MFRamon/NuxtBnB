@@ -21,6 +21,7 @@
     {{ formatDate(user.joined) }} <br/>
     {{ user.reviewCount }} <br/>
     {{ user.description }} <br/>
+    {{ menu }} <br/>
     </div>
 </template>
 <script>
@@ -29,7 +30,7 @@ export default {
         return {
             title: this.home.title,                   
         }
-    },   
+    }, 
     mounted(){
         this.$maps.showMap(this.$refs.map, this.home._geoloc.lat, this.home._geoloc.lng)
     },
@@ -38,22 +39,24 @@ export default {
             $dataApi.getHome(params.id),
             $dataApi.getReviewsByHomeId(params.id),
             $dataApi.getUserByHomeId(params.id),
+            $dataApi.getMenu()
         ])
 
-        const badResponse = responses.find((response) => !response.ok)
-        if(badResponse) return error({ statusCode: badResponse.status, message: badResponse.statusText})
+        // const badResponse = responses.find((response) => !response.ok)
+        // if(badResponse) return error({ statusCode: badResponse.status, message: badResponse.statusText})
 
         return {
             home: responses[0].json,
             reviews: responses[1].json.hits,
-            user: responses[2].json.hits[0]
+            user: responses[2].json.hits[0],
+            menu: responses[3].json
         }
     },
     methods:{
         formatDate(dateStr){
             const date = new Date(dateStr)
             return date.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })
-        }
+        }  
     }
 }
 </script>

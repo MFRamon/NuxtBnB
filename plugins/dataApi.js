@@ -2,6 +2,7 @@ export default function(context, inject){
     const appId = 'QXGX8RCAML'
     const apiKey = 'f0ecada6cb5d32e6496eb1e42c3d7bbd'
     const headers = {
+        'Access-Control-Allow-Origin': '*',
         'X-Algolia-API-Key': apiKey,
         'X-Algolia-Application-Id': appId,
     }
@@ -10,7 +11,16 @@ export default function(context, inject){
         getReviewsByHomeId,
         getUserByHomeId,
         getHomesByLocation,
+        getMenu
     })
+
+    async function getMenu(){
+        try {
+            return unWrap(await fetch("$ENDPONT", { 'Access-Control-Allow-Origin': '*', }))        
+            } catch(error){
+                return getErrorResponse(error)
+            }
+    }
 
     async function getHome(homeId){
         try {
